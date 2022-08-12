@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model shows {
+  id           Int            @id @default(autoincrement())
+  title        String
+  network      String
+  imdbRating   Decimal
+  network_list network_list[]
+}
+
+model packages {
+  id           Int            @id @default(autoincrement())
+  name         String
+  price        Decimal
+  networks     String[]
+  network_list network_list[]
+}
+
+model network_list {
+  id         Int      @id
+  name       String   @unique
+  shows      shows    @relation(fields: [showsId], references: [id])
+  packages   packages @relation(fields: [packagesId], references: [id])
+  showsId    Int
+  packagesId Int
+}
